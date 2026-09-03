@@ -1,0 +1,37 @@
+# Sequencing data — never commit raw or intermediate sequencing files
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.bam.bai
+*.sam
+*.cram
+
+# Analysis outputs / project data directories (project-specific, not part of the pipeline code)
+Analysis_Data/
+Original_Data/
+Importable_Data/
+Metadata/
+Figures/
+Logs/
+
+# R / Python artifacts
+*.rds
+*.RData
+__pycache__/
+*.pyc
+.Rhistory
+.Rproj.user/
+
+# Local agent/IDE config
+.claude/
+.vscode/
+.idea/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# JVM crash logs
+hs_err_pid*.log

@@ -1,0 +1,28 @@
+///INSTRUCTIONS///
+Edit the config.py module to your needs
+    - You will need a gRNA library table and barcode table inside the Metadata folder
+    - They should follow the table layouts specified in the example tables in Metadata
+
+Run: 
+    $ conda env create -f environment
+    $ conda activate crisprscreen
+
+Demultiplex fastq file and extract read counts in a single step:
+    $ Rscript step_1_demultiplex_and_count
+    OPTIONAL: if demultiplexing takes too long running in the terminal, use:
+    $ bsub < demultiplex_and_count.sh
+
+Run mageck to perform statistical testing 
+    $ python3 step_2_mageck_test
+
+Download the "...sgrna_summary.txt" results from Step 2 into your local computer and run downstream analyses
+
+///SCRIPTS///
+The script `step_0_setup.py` is used to automatically create the folder structure for the project analysis
+The script `step_1_demultiplex_and_count.R` is used to demultiplex one fastq file and count reads at the same step
+The script `step_2_mageck_test.py` is used to perform statistical testing using MAGeCK
+
+///FOLDERS///
+The `Processing_an_Analysis/mageck` folder contains the statistical output for the mageck command (Step 2)
+The `Processing_an_Analysis/counts` folder contains the count matrix from Step 1
+The `Scripts` folder contains the scripts that were submitted in the HPC cluster to perform the tasks described in the SCRIPTS section of this guide.
