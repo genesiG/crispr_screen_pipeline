@@ -10,7 +10,7 @@ CRISPR screen's step sequence.
 This repository is a sanitized snapshot of a working research pipeline. Absolute paths, the
 originating HPC username, and the real cell-line/condition labels used in one specific screen
 have been replaced with placeholders, and directories holding raw sequencing data and real
-sample/library metadata have been excluded — see [What's not here](#whats-not-here).
+sample/library metadata have been excluded.
 
 ## Architecture
 
@@ -35,14 +35,13 @@ Scripts/
 Skills/, Specialists/, AGENTS.md   # Agentic orchestration layer (see below)
 ```
 
-**Design principles carried through every step script:**
-- All paths and experiment parameters are derived from `config.py` — nothing is hardcoded
-  per-run, including which sample-name patterns count as a treatment vs. a control.
+**Design principles**
+- Paths are derived from `config.py`.
+- Every step is per-sample and submits its own HPC batch job (`bsub`), writing its own
+  `.batch`/`.log`/`.error` files so a failed sample can be re-run in isolation.
 - `TREATMENTS`/`CONTROLS` are plain pattern lists matched against count-table column names, so
-  adding a new comparison is a config edit, not a code change — `step_3_mageck_test.py` iterates
-  them to submit one MAGeCK job per treatment/control pair.
-- Every batch step submits its own per-comparison or per-sample HPC job and writes its own
-  `.batch`/`.log`/`.error` files.
+  adding a new comparison can be done by simply editing the `config.py` module
+— `step_3_mageck_test.py` iterates them to submit one MAGeCK job per treatment/control pair.
 
 ## Agentic orchestration layer
 
@@ -51,24 +50,6 @@ Skills/, Specialists/, AGENTS.md   # Agentic orchestration layer (see below)
 demultiplexing and MAGeCK jobs, polling with exponential backoff, and handing off to QC after each
 step — see the `cut_and_run_pipeline` and `rnaseq_pipeline` repos for the full description of the
 Specialist roles.
-
-## Tech stack
-
-Python (pandas-driven CLI steps) · R (guide-representation statistics) · MAGeCK · CRISPRO ·
-LSF (`bsub`) batch scheduling · Conda environment management
-
-## What's not here
-
-To protect unpublished data and the originating institution's infrastructure, this snapshot
-excludes:
-- `Analysis_Data/`, `Original_Data/`, `Importable_Data/`, `Metadata/` — all sequencing data, the
-  real sgRNA library/barcode tables, and real sample identifiers.
-- The real cell-line names and screen-condition labels in `config.py`'s `TREATMENTS`/`CONTROLS`
-  lists, replaced with generic placeholders (`CellLineA_low_signal_1st`, etc.) that preserve the
-  multi-line, multi-replicate, signal-stratified comparison structure without disclosing the
-  unpublished screen design.
-- Absolute filesystem paths and the HPC account username, replaced with placeholders
-  (`<your_username>`, `$HOME/miniconda3`).
 
 ## Usage
 
